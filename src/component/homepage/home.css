@@ -23,7 +23,7 @@ nav{
   left: 0;
   bottom: 0;
   width: 15%;
-  height: 110vh;
+  height: 100vh;
   background: #fff;
 }
 .navbar{
@@ -86,11 +86,14 @@ nav i{
   color: rgb(43, 43, 43);
 }
 .main-body{
-  padding: 10px 10px 10px 20px;
+  padding-left: 20px;
+  padding-right: 30px;
   /* margin-top: 20px; */
   background: rgb(167 197 214 / 59%);
   border-radius: 5px;
   margin-top: 40px;
+  height: 100vh;
+  overflow: scroll;
 }
 h1{
   margin: 20px 10px;
