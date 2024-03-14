@@ -18,11 +18,11 @@ html {
   
   form {
     position: absolute;
-    top: 50%;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    width: 40%;
+    width: 45%;
     /* max-width: 400px; */
     background-color: #FFF;
     margin: 0;
@@ -63,7 +63,7 @@ html {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: 115%;
     pointer-events: none;
   }
   form .svgContainer:after {
@@ -234,7 +234,7 @@ html {
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40%;
+    width: 45%;
     height: 200px;
     background: #a5dbee70;
     border-radius: 0.5rem;
