@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./login.css";
 import { TweenMax, Expo, Power2, Quad } from "gsap";
 // https://i.pinimg.com/originals/2d/3c/7e/2d3c7e773ee8d672722a0732940c66dc.jpg
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import * as UserServe from "../../server/userStore";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = () => {
   useEffect(() => {
     var emailLabel = document.querySelector("#loginEmailLabel"),
@@ -646,16 +651,59 @@ const Login = () => {
     initLoginForm();
   }, []);
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
   function toggleActive() {
     var container = document.getElementById("myContainer");
-    container.classList.toggle('active');
+    container.classList.toggle("active");
   }
 
-  const handleAnimationEnd = () => {
-    const container = document.querySelector('.container');
-    container.classList.remove('active');
+  const handleLogin = async () => {
+    const userData = {
+      username: username,
+      password: password,
+    };
+    try {
+      const abc = await UserServe.loginUser(userData);
+      console.log("data", abc.data.user.role);
+
+      if (abc.data.user.role === "USER") {
+        toast.success("success");
+        toggleActive();
+        setTimeout(() => {
+          navigate("/home-page");
+        }, 5000); // 6 giây
+      } else {
+        toast.error("You are not authorized to access this page.");
+        console.log("loi")
+      }
+    } catch (error) {
+      toast.error(`${error.response.data.message}`);
+      console.log("loi1")
+    }
   };
 
+  const handleAnimationEnd = () => {
+    const container = document.querySelector(".container");
+    container.classList.remove("active");
+  };
+
+  const handleInputChange = (e, inputField) => {
+    const value = e.target.value;
+    switch (inputField) {
+      case "username":
+        setUsername(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleFormHover = () => {
     const loginHeader = document.querySelector(".login-header");
@@ -1035,21 +1083,31 @@ const Login = () => {
             <label htmlFor="loginEmail" id="loginEmailLabel">
               Email
             </label>
-            <input type="email" id="loginEmail" maxLength="254" />
-            <p className="helper helper1">email@domain.com</p>
+            <input
+              type="email"
+              id="loginEmail"
+              maxLength="254"
+              value={username}
+              onChange={(e) => handleInputChange(e, "username")}
+            />
           </div>
           <div className="inputGroup inputGroup2">
             <label htmlFor="loginPassword" id="loginPasswordLabel">
               Password
             </label>
-            <input type="password" id="loginPassword" />
+            <input
+              type="password"
+              id="loginPassword"
+              value={password}
+              onChange={(e) => handleInputChange(e, "password")}
+            />
             <label id="showPasswordToggle" htmlFor="showPasswordCheck">
               Show
               <input id="showPasswordCheck" type="checkbox" />
               <div className="indicator"></div>
             </label>
           </div>
-          <div class="container_login" id="myContainer" onClick={toggleActive} >
+          <div class="container_login" id="myContainer" onClick={handleLogin}>
             <span class="text">LOGIN</span>
             <svg
               class="fingerprint fingerprint-base"
@@ -1242,6 +1300,7 @@ const Login = () => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </div>
   );
 };

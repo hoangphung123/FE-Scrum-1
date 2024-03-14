@@ -24,7 +24,7 @@ nav{
   bottom: 0;
   width: 15%;
   height: 100vh;
-  background: #fff;
+  background: rgb(239, 243, 244);
 }
 .navbar{
   width: 80%;
@@ -49,6 +49,8 @@ nav{
 
 ul{
   margin: 0 auto;
+  list-style: none;
+  padding: 0;
 }
 li{
   padding-bottom: 2rem;
@@ -56,6 +58,7 @@ li{
 li a{
   font-size: 16px;
   color: rgb(85, 83, 83);
+  text-decoration: none;
 }
 .nav-item{
 
