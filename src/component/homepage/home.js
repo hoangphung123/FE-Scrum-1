@@ -1,7 +1,14 @@
 import React from "react";
 import "./home.css";
+import { useNavigate } from "react-router-dom";
 function Homepage() {
+  const navigate = useNavigate()
+  
+  const handleProfile = ()=>{
+    navigate('/profile')
+  }
   return (
+
     <div className="homepage">
       <div class="container">
         <nav>
@@ -39,9 +46,9 @@ function Homepage() {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="#" onClick={handleProfile}>
                   <i class="fas fa-cog"></i>
-                  <span class="nav-item">Setting</span>
+                  <span class="nav-item">Profile</span>
                 </a>
               </li>
               <li>
