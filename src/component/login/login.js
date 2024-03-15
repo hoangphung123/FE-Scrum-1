@@ -671,6 +671,8 @@ const Login = () => {
       console.log("data", abc.data.user.role);
 
       if (abc.data.user.role === "USER") {
+        localStorage.setItem('userData', JSON.stringify(abc.data.user));
+        localStorage.setItem('tokenData', JSON.stringify(abc.data.token));
         toast.success("success");
         toggleActive();
         setTimeout(() => {
