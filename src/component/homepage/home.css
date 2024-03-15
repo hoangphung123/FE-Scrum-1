@@ -339,7 +339,7 @@ h1{
 	margin-left: 10px;
 	font-size: 18px;
 }
-.modal-btn:checked + label:after,
+/* .modal-btn:checked + label:after,
 .modal-btn:not(:checked) + label:after{
   position: fixed;
   top: 30px;
@@ -360,7 +360,7 @@ h1{
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px);
-}
+} */
 .modal-btn:checked + label:hover:after,
 .modal-btn:not(:checked) + label:hover:after{
   background-color: #102770;
@@ -375,25 +375,30 @@ h1{
 .modal{
   position: fixed;
   display: block;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -ms-flex-pack: center;
   justify-content: center;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
   z-index: 100;
-  overflow-x: hidden;
-  background-color: rgba(31,32,41,.75);
+  /* overflow-x: hidden; */
+  /* background-color: rgba(31, 32, 41, .75); */
   pointer-events: none;
   opacity: 0;
   transition: opacity 250ms 700ms ease;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.modal-btn:checked ~ .modal{
+/* .modal-btn:checked ~ .modal{
+  pointer-events: auto;
+  opacity: 1;
+  transition: all 300ms ease-in-out;
+} */
+.modal.show {
   pointer-events: auto;
   opacity: 1;
   transition: all 300ms ease-in-out;
@@ -401,18 +406,18 @@ h1{
 .modal-wrap {
   position: relative;
   display: block;
-  width: 40%;
+  width: 900px;
   /* max-width: 400px; */
-  margin: 0 auto;
+  /* margin: 0 auto; */
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 4px;
   /* overflow: hidden; */
   /* padding-bottom: 20px; */
   background-color: #fff;
-    -ms-flex-item-align: center;
-    align-self: center;
-    box-shadow: 0 12px 25px 0 rgba(199,175,189,.25);
+  -ms-flex-item-align: center;
+  align-self: center;
+  box-shadow: 0 8px 25px 0 rgb(253 253 253 / 51%);
   opacity: 0;
   transform: scale(0.6);
   transition: opacity 250ms 250ms ease, transform 300ms 250ms ease;
@@ -430,10 +435,16 @@ h1{
 /* .modal-wrap p {
   padding: 20px 30px 0 30px;
 } */
-.modal-btn:checked ~ .modal .modal-wrap{
+/* .modal-btn:checked ~ .modal .modal-wrap{
   opacity: 1;
   transform: scale(1);
   transition: opacity 250ms 500ms ease, transform 350ms 500ms ease;
+} */
+
+.modal.show .modal-wrap {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 250ms ease, transform 350ms ease;
 }
 
 
@@ -469,6 +480,31 @@ p.labelCss {
 
 select#category {
   margin: 0;
+}
+
+.btn-close {
+  osition: fixed;
+  top: 30px;
+  right: 40px;
+  z-index: 110;
+  width: 40px;
+  border-radius: 3px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+  background-color: #ffeba7;
+  color: #102770;
+  font-family: 'unicons';
+  content: "x";
+  box-shadow: 0 12px 25px 0 rgba(16,39,112,.25);
+  transition: all 200ms linear;
+  /* opacity: 0; */
+  /* pointer-events: none; */
+  /* transform: translateY(20px); */
+  /* margin-right: 30px; */
+  position: relative;
+  top: -49vh;
 }
 
 .btn-epic {
@@ -581,4 +617,27 @@ h1.modal_title {
 
 select#category {
   width: 85%;
+}
+
+.over-play-modal {
+  display: none;
+  background-color: white;
+  width: 200vw;
+  height: 110vh;
+  position: absolute;
+  /* top: 0; */
+  /* left: 0; */
+  background-color: RGB(31, 32, 41, .75);
+  /* backdrop-filter: blur(20px); */
+  z-index: 1;
+  transition: opacity 3s ease;
+}
+
+.over-play-modal.show {
+  display: flex; /* Hiển thị lớp phủ khi modalVisible là true */
+  flex-direction: row-reverse;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
 }
