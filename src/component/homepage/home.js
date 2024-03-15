@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./home.css";
+import { useNavigate } from "react-router-dom";
 import * as ItemStore from "../../server/itemStore";
 function Homepage() {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
@@ -107,6 +109,10 @@ function Homepage() {
     }
   };
 
+  const handleProfile = ()=>{
+    navigate('/profile')
+  }
+
   const handleModalInputChange = (event) => {
     const { name, value } = event.target;
     setModalInput((prevInput) => ({
@@ -161,6 +167,7 @@ function Homepage() {
     fetchItems();
   }, [shouldHideOverlay]);
   return (
+
     <div className="homepage">
       <div
         className={`over-play-modal ${overlayVisible ? "show" : ""}`}
@@ -204,9 +211,9 @@ function Homepage() {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="#" onClick={handleProfile}>
                   <i class="fas fa-cog"></i>
-                  <span class="nav-item">Setting</span>
+                  <span class="nav-item">Profile</span>
                 </a>
               </li>
               <li>
