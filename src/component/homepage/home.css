@@ -311,7 +311,7 @@ h1{
   display: block;
   display: flex;
   margin-left: 40px;
-  z-index: 1000;
+  z-index: 100;
   flex-direction: row-reverse;
   top: 120px;
   right: 88px;
@@ -358,9 +358,9 @@ h1{
   color: #ffeba7;
   box-shadow: 0 12px 35px 0 rgba(16,39,112,.25);
 }
-.modal-btn:not(:checked) + label:hover{
-  background-color: #ffeba7;
-  color: #102770;
+.modal-label:hover{
+  background-color: #ffeba7 !important;
+  color: #102770 !important;
 }
 .modal-btn:checked + label .uil,
 .modal-btn:not(:checked) + label .uil{
@@ -637,6 +637,7 @@ select#category {
 
 .modal_input{
   width: 80% !important;
+  height: 60%;
 }
 
 h1.modal_title {
@@ -645,6 +646,7 @@ h1.modal_title {
 
 select#category {
   width: 85%;
+  height: 60%;
 }
 
 .over-play-modal {
@@ -668,4 +670,48 @@ select#category {
   justify-content: center;
   align-items: center;
   opacity: 1;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu đen với độ trong suốt 50% */
+  z-index: 999; /* Đảm bảo nó hiển thị trên tất cả các phần khác */
+  display: none; /* Mặc định ẩn */
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 9999; /* Đảm bảo nó hiển thị trên overlay */
+  display: none; /* Mặc định ẩn */
+  width: 62%
+}
+
+.popup.show {
+  display: flex; /* Hiển thị popup khi được kích hoạt */
+  flex-direction: column;
+}
+
+.popup-overlay.show {
+  display: block; /* Hiển thị overlay khi được kích hoạt */
+}
+
+img.background-choose {
+  width: 400px;
+  height: 200px;
+  padding-right: 20px;
+  padding: 20px;
+}
+
+.background-choose:hover {
+  border: 2px solid black;
+  cursor: pointer;
 }

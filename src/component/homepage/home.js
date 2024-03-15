@@ -8,9 +8,15 @@ function Homepage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [shouldHideOverlay, setShouldHideOverlay] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const defaultImageUrl =
     "https://i.pinimg.com/564x/12/35/3a/12353a68b508d9720526f65b192f71bf.jpg";
+  const defaultImageUrlBackground =
+    "https://i.pinimg.com/originals/0a/a1/31/0aa131abc3ec589e6ecfb97b763924a4.gif";
   const [imageUrl, setImageUrl] = useState(defaultImageUrl);
+  const [imageUrlBackground, setImageUrlBackground] = useState(
+    defaultImageUrlBackground
+  );
   const [modalInput, setModalInput] = useState({
     category: "",
     description: "",
@@ -113,6 +119,20 @@ function Homepage() {
     navigate("/profile");
   };
 
+  const handleBackgroundClick = () => {
+    setIsPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+
+  const handleBackgroundClicks = (imageUrl) => {
+    setImageUrlBackground(imageUrl);
+    setIsPopupVisible(false); // Close popup after selecting an image
+    localStorage.setItem("backgroundImageUrl", imageUrl);
+  };
+
   const handleModalInputChange = (event) => {
     const { name, value } = event.target;
     setModalInput((prevInput) => ({
@@ -147,6 +167,10 @@ function Homepage() {
   };
 
   useEffect(() => {
+    const storedBackgroundImageUrl = localStorage.getItem("backgroundImageUrl");
+    if (storedBackgroundImageUrl) {
+      setImageUrlBackground(storedBackgroundImageUrl);
+    }
     const fetchItems = async () => {
       try {
         // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
@@ -168,6 +192,111 @@ function Homepage() {
   }, [shouldHideOverlay]);
   return (
     <div className="homepage">
+      <div
+        className={`popup-overlay ${isPopupVisible ? "show" : ""}`}
+        onClick={handleClosePopup}
+      ></div>
+      <div className={`popup ${isPopupVisible ? "show" : ""}`}>
+        <div className="popup-image">
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/0a/a1/31/0aa131abc3ec589e6ecfb97b763924a4.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/0a/a1/31/0aa131abc3ec589e6ecfb97b763924a4.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/3a/82/56/3a8256b391b0de71639848f2815c2b14.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/3a/82/56/3a8256b391b0de71639848f2815c2b14.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/564x/ea/50/7d/ea507d37cc1a18528134941b4f297812.jpg"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/564x/ea/50/7d/ea507d37cc1a18528134941b4f297812.jpg"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/1d/0b/2e/1d0b2e5e8f98b355e2cc68d4c2b46df7.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/1d/0b/2e/1d0b2e5e8f98b355e2cc68d4c2b46df7.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/c8/52/2e/c8522e607334d2059ca00ecfac184316.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/c8/52/2e/c8522e607334d2059ca00ecfac184316.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/7b/6b/b3/7b6bb30ca13ea70ad159058e1012c624.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/7b/6b/b3/7b6bb30ca13ea70ad159058e1012c624.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/d0/56/40/d05640bdc1beb4f6971044bfff635e28.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/d0/56/40/d05640bdc1beb4f6971044bfff635e28.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/d7/33/34/d733345e4f11231904e7634a04439e21.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/d7/33/34/d733345e4f11231904e7634a04439e21.gif"
+              )
+            }
+          ></img>
+          <img
+            className="background-choose"
+            src="https://i.pinimg.com/originals/d8/aa/d9/d8aad938f2beea672124ebf1309584c7.gif"
+            alt="User"
+            onClick={() =>
+              handleBackgroundClicks(
+                "https://i.pinimg.com/originals/d8/aa/d9/d8aad938f2beea672124ebf1309584c7.gif"
+              )
+            }
+          ></img>
+        </div>
+            {/* https://i.pinimg.com/originals/d8/aa/d9/d8aad938f2beea672124ebf1309584c7.gif */}
+        <button className="btn-epic" onClick={handleClosePopup}>
+          <div>
+            <span>Close</span>
+            <span>Close</span>
+          </div>
+        </button>
+      </div>
       <div class="section">
         <div
           className={`over-play-modal ${overlayVisible ? "show" : ""}`}
@@ -261,7 +390,9 @@ function Homepage() {
               <li>
                 <a href="#">
                   <i class="fas fa-chart-bar"></i>
-                  <span class="nav-item">Analytics</span>
+                  <span class="nav-item" onClick={handleBackgroundClick}>
+                    background
+                  </span>
                 </a>
               </li>
               <li>
@@ -298,10 +429,11 @@ function Homepage() {
           </div>
         </nav>
         {/* https://i.pinimg.com/originals/0a/a1/31/0aa131abc3ec589e6ecfb97b763924a4.gif */}
+        {/* https://i.pinimg.com/originals/3a/82/56/3a8256b391b0de71639848f2815c2b14.gif */}
         <div class="main">
           <img
             className="background-main"
-            src="https://i.pinimg.com/originals/3a/82/56/3a8256b391b0de71639848f2815c2b14.gif"
+            src={imageUrlBackground}
             alt="User"
           ></img>
           {/* <div class="main-top">
