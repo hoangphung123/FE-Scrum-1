@@ -3,7 +3,7 @@ import "./profile.css";
 import 'react-toastify/dist/ReactToastify.css';
 import { WrapperContentProfile, WrapperInput, WrapperLabel } from './style.js'
 
-function profile()  {
+function Profile()  {
   return (
     <div class="container">
       <nav style={{width: '15%'}}>
@@ -109,4 +109,4 @@ function profile()  {
   )
 }
 
-export default profile
+export default Profile
