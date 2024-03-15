@@ -17,7 +17,7 @@ body{
   width: 100%;
   /* margin: auto; */
 }
-nav{
+/* nav{
   position: sticky;
   top: 0;
   left: 0;
@@ -25,8 +25,8 @@ nav{
   width: 15%;
   height: 100vh;
   background: rgb(239, 243, 244);
-}
-.navbar{
+} */
+/* .navbar{
   width: 80%;
   margin: 0 auto;
 }
@@ -54,13 +54,13 @@ ul{
 }
 li{
   padding-bottom: 2rem;
-}
-li a{
+} */
+/* li a{
   font-size: 16px;
   color: rgb(85, 83, 83);
   text-decoration: none;
-}
-.nav-item{
+} */
+/* .nav-item{
 
 }
 nav i{
@@ -74,7 +74,7 @@ nav i{
   bottom: 20px;
 }
 
-/* Main Section */
+
 .main{
   width: 85%;
 }
@@ -91,7 +91,7 @@ nav i{
 .main-body{
   padding-left: 20px;
   padding-right: 30px;
-  /* margin-top: 20px; */
+  margin-top: 20px;
   background: rgb(167 197 214 / 59%);
   border-radius: 5px;
   margin-top: 40px;
@@ -104,7 +104,7 @@ h1{
 .search_bar{
   display: flex;
   padding: 10px;
-  /* justify-content: space-between; */
+  justify-content: space-between;
 }
 .search_bar input{
   width: 50%;
@@ -127,7 +127,7 @@ h1{
   width: 55%;
   display: flex;
   padding: 10px;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   gap: 10px;
 }
 .tag{
@@ -156,7 +156,7 @@ h1{
   color: blueviolet;
 }
 .job_card{
-  /* width: 100%; */
+  width: 100%;
   padding: 15px;
   cursor: pointer;
   display: flex;
@@ -196,7 +196,7 @@ h1{
 .job_card:active{
   border: 2px solid blueviolet;
   transition: 0.4s;
-}
+} */
 
 .homepage {
     height: 100%;

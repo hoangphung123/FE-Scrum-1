@@ -109,9 +109,9 @@ function Homepage() {
     }
   };
 
-  const handleProfile = ()=>{
-    navigate('/profile')
-  }
+  const handleProfile = () => {
+    navigate("/profile");
+  };
 
   const handleModalInputChange = (event) => {
     const { name, value } = event.target;
@@ -167,13 +167,79 @@ function Homepage() {
     fetchItems();
   }, [shouldHideOverlay]);
   return (
-
     <div className="homepage">
-      <div
-        className={`over-play-modal ${overlayVisible ? "show" : ""}`}
-        onClick={handleModalToggle}
-      >
-        <div className="btn-close">x</div>
+      <div class="section">
+        <div
+          className={`over-play-modal ${overlayVisible ? "show" : ""}`}
+          onClick={handleModalToggle}
+        >
+          <div className="btn-close">x</div>
+        </div>
+        <input
+          class="modal-btn"
+          type="checkbox"
+          id="modal-btn"
+          name="modal-btn"
+        />
+        <label
+          for="modal-btn"
+          className="modal-label"
+          onClick={handleModalToggle}
+        >
+          Create Request <i class="uil uil-expand-arrows"></i>
+        </label>
+        <div className={`modal ${modalVisible ? "show" : ""}`}>
+          <div class="modal-wrap">
+            <img src={imageUrl} alt="Category" />
+            <div class="modal-content">
+              <h1 className="modal_title">REQUEST</h1>
+              <div className="modal_category">
+                <p className="labelCss">Category:</p>
+                <select
+                  className="select_modal"
+                  id="category"
+                  name="category"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                >
+                  <option value="default">default</option>
+                  <option value="medical">medical</option>
+                  <option value="travel">travel</option>
+                  <option value="food">food</option>
+                  <option value="study">study</option>
+                </select>
+              </div>
+              <div className="modal_category">
+                <p className="labelCss">Description:</p>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  className="modal_input"
+                  value={modalInput.description}
+                  onChange={handleModalInputChange}
+                ></input>
+              </div>
+              <div className="modal_category">
+                <p className="labelCss">Price:</p>
+                <input
+                  className="modal_input"
+                  type="text"
+                  id="price"
+                  name="price"
+                  value={modalInput.price}
+                  onChange={handleModalInputChange}
+                ></input>
+              </div>
+              <button className="btn-epic" onClick={handleCreateRequest}>
+                <div>
+                  <span>Create</span>
+                  <span>Create</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="container">
         <nav>
@@ -231,13 +297,18 @@ function Homepage() {
             </ul>
           </div>
         </nav>
-
+        {/* https://i.pinimg.com/originals/0a/a1/31/0aa131abc3ec589e6ecfb97b763924a4.gif */}
         <div class="main">
+          <img
+            className="background-main"
+            src="https://i.pinimg.com/originals/3a/82/56/3a8256b391b0de71639848f2815c2b14.gif"
+            alt="User"
+          ></img>
           {/* <div class="main-top">
             <p>Explore the universe!</p>
           </div> */}
           <div class="main-body">
-            <h1>Recent Request</h1>
+            <h1 className="title-main-body">Recent Request</h1>
 
             <div class="search_bar">
               <input type="search" placeholder="Search request here..."></input>
@@ -251,76 +322,6 @@ function Homepage() {
               <select class="filter">
                 <option>Filter</option>
               </select>
-              <div class="section">
-                <input
-                  class="modal-btn"
-                  type="checkbox"
-                  id="modal-btn"
-                  name="modal-btn"
-                />
-                <label
-                  for="modal-btn"
-                  className="modal-label"
-                  onClick={handleModalToggle}
-                >
-                  Create Request <i class="uil uil-expand-arrows"></i>
-                </label>
-                <div className={`modal ${modalVisible ? "show" : ""}`}>
-                  <div class="modal-wrap">
-                    <img src={imageUrl} alt="Category" />
-                    <div class="modal-content">
-                      <h1 className="modal_title">REQUEST</h1>
-                      <div className="modal_category">
-                        <p className="labelCss">Category:</p>
-                        <select
-                          className="select_modal"
-                          id="category"
-                          name="category"
-                          value={selectedCategory}
-                          onChange={handleCategoryChange}
-                        >
-                          <option value="default">default</option>
-                          <option value="medical">medical</option>
-                          <option value="travel">travel</option>
-                          <option value="food">food</option>
-                          <option value="study">study</option>
-                        </select>
-                      </div>
-                      <div className="modal_category">
-                        <p className="labelCss">Description:</p>
-                        <input
-                          type="text"
-                          id="description"
-                          name="description"
-                          className="modal_input"
-                          value={modalInput.description}
-                          onChange={handleModalInputChange}
-                        ></input>
-                      </div>
-                      <div className="modal_category">
-                        <p className="labelCss">Price:</p>
-                        <input
-                          className="modal_input"
-                          type="text"
-                          id="price"
-                          name="price"
-                          value={modalInput.price}
-                          onChange={handleModalInputChange}
-                        ></input>
-                      </div>
-                      <button
-                        className="btn-epic"
-                        onClick={handleCreateRequest}
-                      >
-                        <div>
-                          <span>Create</span>
-                          <span>Create</span>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
             <div class="tags_bar">
               <div class="tag">
