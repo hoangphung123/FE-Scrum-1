@@ -27,37 +27,37 @@ function Homepage() {
       category: "medical",
       description: "Job description 1",
       // image: "https://i.pinimg.com/564x/8f/56/76/8f5676d7ab7bc52747fca59d56bbb49c.jpg",
-      tag: "Tag 1",
+      amount: 20000,
       user: {
         name: "User 1",
         image:
           "https://i.pinimg.com/564x/8f/56/76/8f5676d7ab7bc52747fca59d56bbb49c.jpg",
       },
-      timestamp: "2024-03-14T12:00:00Z",
+      status: 1,
     },
     {
       category: "travel",
       description: "Job description 2",
       // image: "https://example.com/image2.jpg",
-      tag: "Tag 2",
+      amount: 20000,
       user: {
         name: "User 2",
         image:
           "https://i.pinimg.com/564x/8f/56/76/8f5676d7ab7bc52747fca59d56bbb49c.jpg",
       },
-      timestamp: "2024-03-13T12:00:00Z",
+      status: 2,
     },
     {
       category: "study",
       description: "Job description 3",
       // image: "https://example.com/image3.jpg",
-      tag: "Tag 3",
+      amount: 20000,
       user: {
         name: "User 3",
         image:
           "https://i.pinimg.com/564x/8f/56/76/8f5676d7ab7bc52747fca59d56bbb49c.jpg",
       },
-      timestamp: "2024-03-12T12:00:00Z",
+      status: 3,
     },
   ]);
 
@@ -119,6 +119,10 @@ function Homepage() {
     navigate("/profile");
   };
 
+  const handleRequest = () => {
+    navigate("/home-page");
+  };
+
   const handleBackgroundClick = () => {
     setIsPopupVisible(true);
   };
@@ -137,16 +141,17 @@ function Homepage() {
     const { name, value } = event.target;
     setModalInput((prevInput) => ({
       ...prevInput,
-      [name]: value,
+      [name]: name === "price" ? parseInt(value) : value, // Chuyển đổi thành số nguyên nếu trường là 'price'
     }));
   };
 
-  const handleCreateRequest = () => {
+  const handleCreateRequest = async () => {
     const categoryValue = selectedCategory || "default";
+    const accessToken = JSON.parse(localStorage.getItem("tokenData"));
     const newRequest = {
       category: categoryValue,
       description: modalInput.description,
-      tag: "tag 4", // You can set tag as per your logic
+      amount: modalInput.price, // You can set tag as per your logic
       user: {
         name: "Your Name", // Set user name accordingly
         image:
@@ -154,8 +159,33 @@ function Homepage() {
       },
       timestamp: new Date().toISOString(), // Set current timestamp
     };
-    handleModalToggle();
-    setItems((prevRequests) => [newRequest, ...prevRequests]);
+
+    const newRequestData = {
+      amount: modalInput.price,
+      category: categoryValue,
+      description: modalInput.description,
+      // tag: "tag 4", // You can set tag as per your logic
+      // user: {
+      //   name: "Your Name", // Set user name accordingly
+      //   image: "https://i.pinimg.com/564x/8f/56/76/8f5676d7ab7bc52747fca59d56bbb49c.jpg", // Set user image accordingly
+      // },
+      // timestamp: new Date().toISOString(), // Set current timestamp
+    };
+
+    try {
+      // Gửi yêu cầu tạo mới đến API
+      const createdRequest = await ItemStore.createRequest(
+        accessToken,
+        newRequestData
+      );
+      console.log("New request created:", createdRequest);
+      // Sau khi tạo yêu cầu thành công, bạn có thể thực hiện các hành động khác tại đây (ví dụ: cập nhật giao diện, hiển thị thông báo, vv.)
+      handleModalToggle();
+      setItems((prevRequests) => [newRequest, ...prevRequests]);
+    } catch (error) {
+      console.error("Error while creating request:", error.message);
+      // Xử lý lỗi nếu cần
+    }
   };
 
   const handleModalToggle = () => {
@@ -289,7 +319,7 @@ function Homepage() {
             }
           ></img>
         </div>
-            {/* https://i.pinimg.com/originals/d8/aa/d9/d8aad938f2beea672124ebf1309584c7.gif */}
+        {/* https://i.pinimg.com/originals/d8/aa/d9/d8aad938f2beea672124ebf1309584c7.gif */}
         <button className="btn-epic" onClick={handleClosePopup}>
           <div>
             <span>Close</span>
@@ -353,7 +383,7 @@ function Homepage() {
                 <p className="labelCss">Price:</p>
                 <input
                   className="modal_input"
-                  type="text"
+                  type="number"
                   id="price"
                   name="price"
                   value={modalInput.price}
@@ -382,41 +412,23 @@ function Homepage() {
             </div>
             <ul>
               <li>
-                <a href="#">
+                <a href="#" onClick={handleRequest}>
                   <i class="fas fa-user"></i>
-                  <span class="nav-item">Dashboard</span>
+                  <span class="nav-item">REQUEST</span>
                 </a>
               </li>
               <li>
                 <a href="#">
                   <i class="fas fa-chart-bar"></i>
                   <span class="nav-item" onClick={handleBackgroundClick}>
-                    background
+                    BACKGROUND
                   </span>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="fas fa-tasks"></i>
-                  <span class="nav-item">Jobs Board</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="fab fa-dochub"></i>
-                  <span class="nav-item">Documnents</span>
                 </a>
               </li>
               <li>
                 <a href="#" onClick={handleProfile}>
                   <i class="fas fa-cog"></i>
                   <span class="nav-item">Profile</span>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i class="fas fa-question-circle"></i>
-                  <span class="nav-item">Help</span>
                 </a>
               </li>
               <li>
@@ -492,14 +504,37 @@ function Homepage() {
                       )}
                     </div>
                     <div class="card-body">
-                      <span class="tag tag-teal">{item.tag}</span>
+                      <span class="tag tag-teal">{item.amount}</span>
                       <h4>{item.category}</h4>
                       <p>{item.description}</p>
                       <div class="user">
+                        {item.status === 1 && (
+                          <a href="#" className="cta">
+                            <span>Delete</span>
+                            <svg width="13px" height="10px" viewBox="0 0 13 10">
+                              <path d="M1,5 L11,5"></path>
+                              <polyline points="8 1 12 5 8 9"></polyline>
+                            </svg>
+                          </a>
+                        )}
+                        {item.status === 2 && (
+                          <button class="pure-button fuller-button red">
+                            PENDING
+                          </button>
+                        )}
+                        {item.status === 3 && (
+                          <button class="pure-button fuller-button blue">
+                            APPROVED
+                          </button>
+                        )}
                         <img src={item.user.image} alt="User" />
                         <div class="user-info">
-                          <h5>{item.user.name}</h5>
-                          <small>{item.timestamp}</small>
+                          <h5>
+                            {localStorage.getItem("userData") &&
+                              JSON.parse(localStorage.getItem("userData"))
+                                .username}
+                          </h5>
+                          {/* <small>{item.timestamp}</small> */}
                         </div>
                       </div>
                     </div>

@@ -715,3 +715,171 @@ img.background-choose {
   border: 2px solid black;
   cursor: pointer;
 }
+
+.user-info {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+/*button logout*/
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cta {
+  margin-right: 40px;
+  position: relative;
+  /* margin: auto; */
+  /* padding: 19px 22px; */
+  transition: all 0.2s ease;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  right: 0;
+}
+.cta:before {
+  content: "";
+  position: absolute;
+  /* top: 0; */
+  left: 0;
+  display: block;
+  border-radius: 28px;
+  background: rgb(232 97 74 / 78%);
+  width: 31px;
+  height: 30px;
+  transition: all 0.3s ease;
+  padding: 5px;
+  margin-left: -5px;
+}
+.cta span {
+  position: relative;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.cta svg {
+  position: relative;
+  top: 0;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #111;
+  stroke-width: 2;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+.cta:hover:before {
+  width: 100%;
+  background: rgba(255, 171, 157, 1);
+}
+.cta:hover svg {
+  transform: translateX(0);
+}
+.cta:active {
+  transform: scale(0.96);
+}
+
+/*button thong bao*/
+.fuller-button {
+  color: rgb(15, 15, 15);
+  background: none;
+  border-radius: 0;
+  padding: 1em 3em;
+  letter-spacing: 0.35em;
+  font-size: 0.7em;
+  transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+  /* margin: 1em; */
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+.fuller-button.blue {
+  background-color: #0dd;
+  box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5), 0 0 1.5em rgba(0, 170, 170, 0.7);
+}
+
+.fuller-button.red {
+  background-color: #d7fb54;
+  box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4), 0 0 1.5em rgba(251, 81, 81, 0.6);
+}
+
+
+.fuller-button.white {
+  box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3), 0 0 0.8em rgba(255, 255, 255, 0.3);
+  border: #fff solid 2px;
+}
+
+.fuller-button.white:hover {
+  color: rgba(0, 0, 0, 0.8);
+  background-color: #fff;
+  box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3), 0 0 1.2em rgba(255, 255, 255, 0.5);
+}
+
+.pure-control-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0 1em 2.6em 1em;
+}
+
+.pure-form .pure-control-group label {
+  text-align: left;
+  position: absolute;
+  left: 0;
+  top: 15%;
+  z-index: 0;
+  letter-spacing: 0;
+  margin: 0 1em;
+}
+
+.pure-form .pure-control-group input {
+  background: none;
+  box-shadow: none;
+  padding-left: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+
+.pure-form .pure-control-group input:focus {
+  border-bottom: 2px solid white;
+}
+
+.pure-form .pure-control-group textarea {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  border: none;
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
+  resize: none;
+  height: 8em;
+  color: #fff;
+}
+
+.pure-form .pure-control-group textarea:focus {
+  border-left: 2px solid white;
+}
+
+.pure-form .pure-control-group input[type=email]:focus:invalid {
+  color: #fff;
+}
+
+.pure-form .pure-control-group input[type=email]:invalid {
+  color: #fb5454;
+}
+
+.pure-form button {
+  margin: 0.5em 1em;
+}
