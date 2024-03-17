@@ -31,3 +31,18 @@ export const createRequest = async (accessToken, requestData) => {
     throw error;
   }
 };
+
+export const deleteRequest = async (accessToken, requestId) => {
+  try {
+    const response = await axios.delete(`${api_url}/expense/${requestId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data; // Nếu API của bạn trả về dữ liệu sau khi xóa, hãy cập nhật dòng này
+  } catch (error) {
+    console.error("Error while deleting request:", error.message);
+    throw error;
+  }
+};
+

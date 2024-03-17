@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import * as ItemStore from "../../server/itemStore";
 function Homepage() {
   const navigate = useNavigate();
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
@@ -115,6 +117,16 @@ function Homepage() {
     }
   };
 
+  const openDeleteConfirmation = (itemId) => {
+    setItemIdToDelete(itemId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setItemIdToDelete(null);
+    setShowDeleteConfirmation(false);
+  };
+
   const handleProfile = () => {
     navigate("/profile");
   };
@@ -145,6 +157,20 @@ function Homepage() {
     }));
   };
 
+  const handleDeleteRequest = async (requestId) => {
+    try {
+      const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+      await ItemStore.deleteRequest(accessToken, requestId);
+      setItems((prevItems) =>
+        prevItems.filter((item) => item.id !== requestId)
+      );
+      closeDeleteConfirmation();
+      console.log("Request deleted successfully.");
+    } catch (error) {
+      console.error("Error while deleting request:", error.message);
+    }
+  };
+
   const handleCreateRequest = async () => {
     const categoryValue = selectedCategory || "default";
     const accessToken = JSON.parse(localStorage.getItem("tokenData"));
@@ -152,6 +178,7 @@ function Homepage() {
       category: categoryValue,
       description: modalInput.description,
       amount: modalInput.price, // You can set tag as per your logic
+      status: 0,
       user: {
         name: "Your Name", // Set user name accordingly
         image:
@@ -222,6 +249,27 @@ function Homepage() {
   }, [shouldHideOverlay]);
   return (
     <div className="homepage">
+      {showDeleteConfirmation && (
+        <div className="popup-overlay1" onClick={closeDeleteConfirmation}>
+          <div className="popup1">
+            <p className="title-popup">Bạn có chắc chắn muốn xóa không?</p>
+            <div className="button-popup">
+              <button className="btn-epic" onClick={() => handleDeleteRequest(itemIdToDelete)}>
+                <div>
+                  <span>Xác nhận</span>
+                  <span>Xác nhận</span>
+                </div>
+              </button>
+              <button className="btn-epic1" onClick={closeDeleteConfirmation}>
+                <div>
+                  <span>Hủy</span>
+                  <span>Hủy</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         className={`popup-overlay ${isPopupVisible ? "show" : ""}`}
         onClick={handleClosePopup}
@@ -503,13 +551,21 @@ function Homepage() {
                         />
                       )}
                     </div>
-                    <div class="card-body">
+                    <div
+                      class={`card-body ${
+                        item.status === 3 ? "red-background" : ""
+                      }`}
+                    >
                       <span class="tag tag-teal">{item.amount}</span>
                       <h4>{item.category}</h4>
                       <p>{item.description}</p>
                       <div class="user">
-                        {item.status === 1 && (
-                          <a href="#" className="cta">
+                        {(item.status === 0 || item.status === 3) && (
+                          <a
+                            href="#"
+                            className="cta"
+                            onClick={() => openDeleteConfirmation(item.id)}
+                          >
                             <span>Delete</span>
                             <svg width="13px" height="10px" viewBox="0 0 13 10">
                               <path d="M1,5 L11,5"></path>
@@ -517,24 +573,22 @@ function Homepage() {
                             </svg>
                           </a>
                         )}
-                        {item.status === 2 && (
+                        {item.status === 1 && (
                           <button class="pure-button fuller-button red">
                             PENDING
                           </button>
                         )}
-                        {item.status === 3 && (
+                        {item.status === 2 && (
                           <button class="pure-button fuller-button blue">
                             APPROVED
                           </button>
                         )}
-                        <img src={item.user.image} alt="User" />
                         <div class="user-info">
                           <h5>
                             {localStorage.getItem("userData") &&
                               JSON.parse(localStorage.getItem("userData"))
                                 .username}
                           </h5>
-                          {/* <small>{item.timestamp}</small> */}
                         </div>
                       </div>
                     </div>
