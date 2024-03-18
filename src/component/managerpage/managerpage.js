@@ -70,7 +70,6 @@ function ManagerPage() {
           gap: "1rem",
           background: "rgb(167 197 214 / 59%)",
           borderRadius: "5px",
-          marginTop: "2.5rem",
         }}
       >
         <div
