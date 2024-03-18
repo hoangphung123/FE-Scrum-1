@@ -671,27 +671,35 @@ const Login = () => {
       console.log("data", abc.data.user.role);
 
       if (abc.data.user.role === "USER") {
-        localStorage.setItem('userData', JSON.stringify(abc.data.user));
-        localStorage.setItem('tokenData', JSON.stringify(abc.data.token));
+        localStorage.setItem("userData", JSON.stringify(abc.data.user));
+        localStorage.setItem("tokenData", JSON.stringify(abc.data.token));
         toast.success("success");
         toggleActive();
         setTimeout(() => {
           navigate("/home-page");
-        }, 5000); // 6 giây
+        }, 5000); // 5 giây
+      } else if (abc.data.user.role === "MANAGER") {
+        localStorage.setItem("userData", JSON.stringify(abc.data.user));
+        localStorage.setItem("tokenData", JSON.stringify(abc.data.token));
+        toast.success("success");
+        toggleActive();
+        setTimeout(() => {
+          navigate("/manager-page");
+        }, 5000); // 5 giây
       } else {
         toast.error("You are not authorized to access this page.");
-        console.log("loi")
+        console.log("loi");
       }
     } catch (error) {
       toast.error(`${error.response.data.message}`);
-      console.log("loi1")
+      console.log("loi1");
     }
   };
 
-  const handleAnimationEnd = () => {
-    const container = document.querySelector(".container");
-    container.classList.remove("active");
-  };
+  // const handleAnimationEnd = () => {
+  //   const container = document.querySelector(".container");
+  //   container.classList.remove("active");
+  // };
 
   const handleInputChange = (e, inputField) => {
     const value = e.target.value;
@@ -1302,7 +1310,7 @@ const Login = () => {
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
