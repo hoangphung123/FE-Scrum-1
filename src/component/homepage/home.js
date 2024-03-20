@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import * as ItemStore from "../../server/itemStore";
+import LogoutComponent from "../logoutComponent/logoutComponent";
+import { Tooltip, ConfigProvider } from "antd";
 function Homepage() {
   const navigate = useNavigate();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -73,6 +76,27 @@ function Homepage() {
     food: "https://i.pinimg.com/564x/51/35/27/5135270181bf161435686dea0e2f7453.jpg",
     study:
       "https://i.pinimg.com/564x/e4/45/30/e445308d37ee7f436653e79771bc4aeb.jpg",
+    event:
+      "https://i.pinimg.com/564x/fc/45/49/fc45499f451b1bf18d9b8488b2dac7de.jpg",
+  };
+
+  const handleLogout = () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData) {
+      userData.role = "";
+      userData.username = "";
+      userData.id = "";
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+    // Xử lý đăng xuất ở đây
+    navigate("/");
+    // Sau khi đăng xuất, đóng cửa sổ xác nhận
+    setShowLogoutConfirmation(false);
+  };
+
+  const closeLogoutConfirmation = () => {
+    // Đóng cửa sổ xác nhận
+    setShowLogoutConfirmation(false);
   };
 
   const handleCategoryChange = (event) => {
@@ -111,6 +135,11 @@ function Homepage() {
           "https://i.pinimg.com/564x/e4/45/30/e445308d37ee7f436653e79771bc4aeb.jpg"
         );
         break;
+      case "event":
+        setImageUrl(
+          "https://i.pinimg.com/564x/fc/45/49/fc45499f451b1bf18d9b8488b2dac7de.jpg"
+        );
+        break;
       default:
         setImageUrl(defaultImageUrl);
         break;
@@ -125,14 +154,6 @@ function Homepage() {
   const closeDeleteConfirmation = () => {
     setItemIdToDelete(null);
     setShowDeleteConfirmation(false);
-  };
-
-  const handleProfile = () => {
-    navigate("/profile");
-  };
-
-  const handleRequest = () => {
-    navigate("/home-page");
   };
 
   const handleBackgroundClick = () => {
@@ -224,6 +245,15 @@ function Homepage() {
   };
 
   useEffect(() => {
+    function handleProtectPage() {
+      // Kiểm tra xem có dữ liệu về vai trò trong localStorage không
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if (userData.role !== "USER") {
+        // Nếu vai trò khác USER, chuyển hướng đến trang "/"
+        window.location.href = "/";
+      }
+    }
+
     const storedBackgroundImageUrl = localStorage.getItem("backgroundImageUrl");
     if (storedBackgroundImageUrl) {
       setImageUrlBackground(storedBackgroundImageUrl);
@@ -233,6 +263,12 @@ function Homepage() {
         // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
         const accessToken = JSON.parse(localStorage.getItem("tokenData"));
         const RequestItem = await ItemStore.getAllPost(accessToken);
+
+        // Sắp xếp mảng RequestItem theo trường updatedAt
+        RequestItem.listData.sort((a, b) => {
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        });
+
         setItems(RequestItem.listData);
       } catch (error) {
         console.error("Error fetching friends:", error.message);
@@ -245,16 +281,25 @@ function Homepage() {
       }, 500);
     }
 
+    handleProtectPage();
     fetchItems();
   }, [shouldHideOverlay]);
   return (
     <div className="homepage">
+      <LogoutComponent
+        showLogout={showLogoutConfirmation}
+        closeLogout={closeLogoutConfirmation}
+        handleLogout={handleLogout}
+      />
       {showDeleteConfirmation && (
         <div className="popup-overlay1" onClick={closeDeleteConfirmation}>
           <div className="popup1">
             <p className="title-popup">Bạn có chắc chắn muốn xóa không?</p>
             <div className="button-popup">
-              <button className="btn-epic" onClick={() => handleDeleteRequest(itemIdToDelete)}>
+              <button
+                className="btn-epic"
+                onClick={() => handleDeleteRequest(itemIdToDelete)}
+              >
                 <div>
                   <span>Xác nhận</span>
                   <span>Xác nhận</span>
@@ -393,7 +438,7 @@ function Homepage() {
           className="modal-label"
           onClick={handleModalToggle}
         >
-          Create Request <i class="uil uil-expand-arrows"></i>
+          +
         </label>
         <div className={`modal ${modalVisible ? "show" : ""}`}>
           <div class="modal-wrap">
@@ -414,6 +459,7 @@ function Homepage() {
                   <option value="travel">travel</option>
                   <option value="food">food</option>
                   <option value="study">study</option>
+                  <option value="event">event</option>
                 </select>
               </div>
               <div className="modal_category">
@@ -460,7 +506,7 @@ function Homepage() {
             </div>
             <ul>
               <li>
-                <a href="#" onClick={handleRequest}>
+                <a href="/home-page">
                   <i class="fas fa-user"></i>
                   <span class="nav-item">REQUEST</span>
                 </a>
@@ -474,13 +520,17 @@ function Homepage() {
                 </a>
               </li>
               <li>
-                <a href="#" onClick={handleProfile}>
+                <a href="/profile">
                   <i class="fas fa-cog"></i>
                   <span class="nav-item">Profile</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="logout">
+                <a
+                  href="#"
+                  class="logout"
+                  onClick={() => setShowLogoutConfirmation(true)}
+                >
                   <i class="fas fa-sign-out-alt"></i>
                   <span class="nav-item">Logout</span>
                 </a>
@@ -510,12 +560,17 @@ function Homepage() {
                 <option>Medical</option>
                 <option>Travel</option>
                 <option>Food</option>
+                <option>Event</option>
               </select>
               <select class="filter">
                 <option>Filter</option>
               </select>
             </div>
             <div class="tags_bar">
+              <div class="tag">
+                <i class="fas fa-times"></i>
+                <span>Default</span>
+              </div>
               <div class="tag">
                 <i class="fas fa-times"></i>
                 <span>Medical</span>
@@ -532,6 +587,10 @@ function Homepage() {
                 <i class="fas fa-times"></i>
                 <span>Travel</span>
               </div>
+              <div class="tag">
+                <i class="fas fa-times"></i>
+                <span>Event</span>
+              </div>
             </div>
 
             <div class="row">
@@ -542,57 +601,67 @@ function Homepage() {
             <div class="container_card">
               {requestItem &&
                 requestItem.map((item, index) => (
-                  <div class="card" key={index}>
-                    <div class="card-header">
-                      {item.category && categoryImages[item.category] && (
-                        <img
-                          src={categoryImages[item.category]}
-                          alt={`Category ${index}`}
-                        />
-                      )}
-                    </div>
-                    <div
-                      class={`card-body ${
-                        item.status === 3 ? "red-background" : ""
-                      }`}
-                    >
-                      <span class="tag tag-teal">{item.amount}</span>
-                      <h4>{item.category}</h4>
-                      <p>{item.description}</p>
-                      <div class="user">
-                        {(item.status === 0 || item.status === 3) && (
-                          <a
-                            href="#"
-                            className="cta"
-                            onClick={() => openDeleteConfirmation(item.id)}
-                          >
-                            <span>Delete</span>
-                            <svg width="13px" height="10px" viewBox="0 0 13 10">
-                              <path d="M1,5 L11,5"></path>
-                              <polyline points="8 1 12 5 8 9"></polyline>
-                            </svg>
-                          </a>
+                  <Tooltip
+                    key={index}
+                    title={item.status === 3 ? item.note : ""}
+                    placement="top"
+                  >
+                    <div className="card">
+                      <div className="card-header">
+                        {item.category && categoryImages[item.category] && (
+                          <img
+                            src={categoryImages[item.category]}
+                            alt={`Category ${index}`}
+                          />
                         )}
-                        {item.status === 1 && (
-                          <button class="pure-button fuller-button red">
-                            PENDING
-                          </button>
-                        )}
-                        {item.status === 2 && (
-                          <button class="pure-button fuller-button blue">
-                            APPROVED
-                          </button>
-                        )}
-                        <div class="user-info">
-                          <h5>
-                            {localStorage.getItem("userData") &&
-                              JSON.parse(localStorage.getItem("userData"))
-                                .username}
-                          </h5>
+                      </div>
+                      <div
+                        className={`card-body ${
+                          item.status === 3 ? "red-background" : ""
+                        }`}
+                      >
+                        <span className="tag tag-teal">{item.amount} vnd</span>
+                        <h4>{item.category}</h4>
+                        <p>{item.description}</p>
+                        <div className="user">
+                          {(item.status === 0 || item.status === 3) && (
+                            <a
+                              href="#"
+                              className="cta"
+                              onClick={() => openDeleteConfirmation(item.id)}
+                            >
+                              <span>Delete</span>
+                              <svg
+                                width="13px"
+                                height="10px"
+                                viewBox="0 0 13 10"
+                              >
+                                <path d="M1,5 L11,5"></path>
+                                <polyline points="8 1 12 5 8 9"></polyline>
+                              </svg>
+                            </a>
+                          )}
+                          {item.status === 1 && (
+                            <button className="pure-button fuller-button red">
+                              PENDING
+                            </button>
+                          )}
+                          {item.status === 2 && (
+                            <button className="pure-button fuller-button blue">
+                              APPROVED
+                            </button>
+                          )}
+                          <div className="user-info">
+                            <h5>
+                              {localStorage.getItem("userData") &&
+                                JSON.parse(localStorage.getItem("userData"))
+                                  .username}
+                            </h5>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Tooltip>
                 ))}
             </div>
           </div>
