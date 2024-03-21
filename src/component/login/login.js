@@ -686,6 +686,14 @@ const Login = () => {
         setTimeout(() => {
           navigate("/manager-page");
         }, 5000); // 6 giây
+      } else if (abc.data.user.role === "FD") {
+        localStorage.setItem('userData', JSON.stringify(abc.data.user));
+        localStorage.setItem('tokenData', JSON.stringify(abc.data.token));
+        toast.success("success");
+        toggleActive();
+        setTimeout(() => {
+          navigate("Treasurer");
+        }, 5000); // 6 giây
       } else {
         toast.error("You are not authorized to access this page.");
         console.log("loi")

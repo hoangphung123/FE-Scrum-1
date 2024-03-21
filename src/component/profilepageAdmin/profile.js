@@ -15,7 +15,7 @@ function Profile() {
   };
 
   const handleRequest = () => {
-    navigate("/home-page");
+    navigate("/manager-page");
   };
 
   const handleClosePopup = () => {
@@ -188,15 +188,7 @@ function Profile() {
               <a href="#">
                 <i class="fas fa-user"></i>
                 <span class="nav-item" onClick={handleRequest}>
-                  REQUEST
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fas fa-chart-bar"></i>
-                <span class="nav-item" onClick={handleBackgroundClick}>
-                  BACKGROUND
+                  DASHBOARD
                 </span>
               </a>
             </li>

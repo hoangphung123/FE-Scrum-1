@@ -5,10 +5,10 @@ import "./manager.css";
 import LogoutComponent from "../logoutComponent/logoutComponent";
 import { useNavigate } from "react-router-dom";
 import * as ItemStore from "../../server/itemStore";
-import PopupRefuseRequest from "../refuseAdmin/refuseAdmin";
 import * as UserStore from "../../server/userStore";
+import PopupRefuseRequest from "../refuseAdmin/refuseAdmin";
 
-function ManagerPage() {
+function Treasurer() {
   const navigate = useNavigate();
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [showRefusePopup, setShowRefusePopup] = useState(false);
@@ -78,6 +78,7 @@ function ManagerPage() {
       const accessToken = JSON.parse(localStorage.getItem("tokenData"));
       await ItemStore.approveRequestByAdmin(accessToken, requestId);
       fetchItems();
+      fetchProfile();
     } catch (error) {
       console.error("Error approving item:", error.message);
       // Xử lý lỗi nếu cần thiết
@@ -86,16 +87,20 @@ function ManagerPage() {
 
   const fetchItems = async () => {
     try {
-      // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
       const accessToken = JSON.parse(localStorage.getItem("tokenData"));
       const RequestItem = await ItemStore.getAllPostByAdmin(accessToken);
 
-      // Sắp xếp mảng RequestItem theo trường updatedAt
-      RequestItem.listData.sort((a, b) => {
+      // Lọc bỏ các phần tử có status === 0
+      const filteredItems = RequestItem.listData.filter(
+        (item) => item.status !== 0
+      );
+
+      // Sắp xếp mảng filteredItems theo trường updatedAt
+      filteredItems.sort((a, b) => {
         return new Date(b.updatedAt) - new Date(a.updatedAt);
       });
 
-      setItems(RequestItem.listData);
+      setItems(filteredItems);
     } catch (error) {
       console.error("Error fetching friends:", error.message);
     }
@@ -140,11 +145,26 @@ function ManagerPage() {
     setShowLogoutConfirmation(false);
   };
 
+  const fetchProfile = async () => {
+    try {
+      // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
+      const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+      const ProfileItem = await UserStore.getProfile(accessToken);
+
+      // Sắp xếp mảng RequestItem theo trường updatedAt
+
+      console.log("amountTotal", ProfileItem);
+      setAmountTotal(ProfileItem);
+    } catch (error) {
+      console.error("Error fetching friends:", error.message);
+    }
+  };
+
   useEffect(() => {
     function handleProtectPage() {
       // Kiểm tra xem có dữ liệu về vai trò trong localStorage không
       const userData = JSON.parse(localStorage.getItem("userData"));
-      if (userData.role !== "MANAGER") {
+      if (userData.role !== "FD") {
         // Nếu vai trò khác USER, chuyển hướng đến trang "/"
         window.location.href = "/";
       }
@@ -152,16 +172,20 @@ function ManagerPage() {
 
     const fetchItems = async () => {
       try {
-        // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
         const accessToken = JSON.parse(localStorage.getItem("tokenData"));
         const RequestItem = await ItemStore.getAllPostByAdmin(accessToken);
 
-        // Sắp xếp mảng RequestItem theo trường updatedAt
-        RequestItem.listData.sort((a, b) => {
+        // Lọc bỏ các phần tử có status === 0
+        const filteredItems = RequestItem.listData.filter(
+          (item) => item.status !== 0
+        );
+
+        // Sắp xếp mảng filteredItems theo trường updatedAt
+        filteredItems.sort((a, b) => {
           return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
 
-        setItems(RequestItem.listData);
+        setItems(filteredItems);
       } catch (error) {
         console.error("Error fetching friends:", error.message);
       }
@@ -182,8 +206,8 @@ function ManagerPage() {
       }
     };
 
-    fetchProfile();
     handleProtectPage();
+    fetchProfile();
     fetchItems();
   }, []);
 
@@ -215,6 +239,7 @@ function ManagerPage() {
       title: "category",
       key: "category",
       dataIndex: "category",
+      width: "200px",
       render: (category) => (
         <Tag color={getCategoryColor(category)}>{category.toUpperCase()}</Tag>
       ),
@@ -225,7 +250,7 @@ function ManagerPage() {
       width: "300px",
       render: (_, record) => (
         <div className="action-area">
-          {record.status === 0 && (
+          {record.status === 1 && (
             <>
               <button
                 className="btn-epic2"
@@ -247,13 +272,8 @@ function ManagerPage() {
               </button>
             </>
           )}
-          {record.status === 1 && (
-            <button className="pure-button1 fuller-button1 blue">
-              CONFIRMED
-            </button>
-          )}
           {record.status === 2 && (
-            <button className="pure-button1 fuller-button1 yellow">PAID</button>
+            <button className="pure-button1 fuller-button1 blue">PAID</button>
           )}
           {record.status === 3 && (
             <button className="pure-button1 fuller-button1 red">REFUSE</button>
@@ -292,17 +312,18 @@ function ManagerPage() {
                 amountTotal.data.username}{" "}
             </h1>
           </div>
+          <p className="amount-total">
+            {amountTotal &&
+              amountTotal.data &&
+              amountTotal.data.balance.toLocaleString()}{" "}
+            vnđ
+          </p>
+
           <ul>
             <li>
               <a href="/manager-page">
                 <i class="fas fa-user"></i>
                 <span class="nav-item">Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="/profileAdmin">
-                <i class="fas fa-user"></i>
-                <span class="nav-item">Profile</span>
               </a>
             </li>
             <li>
@@ -354,4 +375,4 @@ function ManagerPage() {
   );
 }
 
-export default ManagerPage;
+export default Treasurer;

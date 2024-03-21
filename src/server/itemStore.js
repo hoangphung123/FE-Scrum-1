@@ -141,4 +141,19 @@ export const approveRequestByAdmin = async (accessToken, requestId) => {
   }
 };
 
+export const getAllPostByAdminStatus = async (accessToken, status) => {
+  try {
+    const response = await axios.get(`${api_url}/admin/expense/filter?status=${status}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const posts = response.data; // Cập nhật dòng này dựa trên cấu trúc phản hồi của API của bạn
+    return posts;
+  } catch (error) {
+    console.error("Error while fetching posts:", error.message);
+    throw error;
+  }
+};
+
 

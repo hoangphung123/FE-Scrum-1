@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as ItemStore from "../../server/itemStore";
 import LogoutComponent from "../logoutComponent/logoutComponent";
 import { Tooltip, ConfigProvider } from "antd";
+import * as UserStore from "../../server/userStore";
 function Homepage() {
   const navigate = useNavigate();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -15,6 +16,7 @@ function Homepage() {
   const [shouldHideOverlay, setShouldHideOverlay] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedCategorys, setSelectedCategorys] = useState(null);
+  const [amountTotal, setAmountTotal] = useState(null);
 
   const [keyword, setKeyword] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -312,6 +314,21 @@ function Homepage() {
   };
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
+        const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+        const ProfileItem = await UserStore.getProfile(accessToken);
+
+        // Sắp xếp mảng RequestItem theo trường updatedAt
+
+        console.log("amountTotal", ProfileItem);
+        setAmountTotal(ProfileItem);
+      } catch (error) {
+        console.error("Error fetching friends:", error.message);
+      }
+    };
+
     function handleProtectPage() {
       // Kiểm tra xem có dữ liệu về vai trò trong localStorage không
       const userData = JSON.parse(localStorage.getItem("userData"));
@@ -350,6 +367,7 @@ function Homepage() {
 
     handleProtectPage();
     fetchItems();
+    fetchProfile();
   }, [shouldHideOverlay]);
   return (
     <div className="homepage">
@@ -566,11 +584,25 @@ function Homepage() {
           <div class="navbar">
             <div class="logo">
               <img
-                src="https://i.pinimg.com/564x/cb/36/8a/cb368a192d3e017668847525d04e1a91.jpg"
+                src={amountTotal &&
+                  amountTotal.data &&
+                  amountTotal.data.avatar_url &&
+                  amountTotal.data.avatar_url}
                 alt=""
               ></img>
-              <h1>jobs</h1>
+              <h1>{amountTotal &&
+                amountTotal.data &&
+                amountTotal.data.username &&
+                amountTotal.data.username}{" "}
+              </h1>
             </div>
+            <p className="amount-total">
+              {amountTotal &&
+                amountTotal.data &&
+                amountTotal.data.balance &&
+                amountTotal.data.balance.toLocaleString()}{" "}
+              vnđ
+            </p>
             <ul>
               <li>
                 <a href="/home-page">
