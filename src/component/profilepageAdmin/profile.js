@@ -4,14 +4,35 @@ import "react-toastify/dist/ReactToastify.css";
 import { WrapperContentProfile, WrapperInput, WrapperLabel } from "./style.js";
 import { useNavigate } from "react-router-dom";
 import * as UserStore from "../../server/userStore";
+import LogoutComponent from "../logoutComponent/logoutComponent";
 
 function Profile() {
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const navigate = useNavigate();
   const [amountTotal, setAmountTotal] = useState(null);
 
+  const closeLogoutConfirmation = () => {
+    // Đóng cửa sổ xác nhận
+    setShowLogoutConfirmation(false);
+  };
+
+  const handleLogout = () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData) {
+      userData.role = "";
+      userData.username = "";
+      userData.id = "";
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+    // Xử lý đăng xuất ở đây
+    navigate("/");
+    // Sau khi đăng xuất, đóng cửa sổ xác nhận
+    setShowLogoutConfirmation(false);
+  };
+
   const handleProfile = () => {
-    navigate("/profile");
+    navigate("/profileAdmin");
   };
 
   const handleRequest = () => {
@@ -61,6 +82,11 @@ function Profile() {
   }, []);
   return (
     <div class="container">
+      <LogoutComponent
+        showLogout={showLogoutConfirmation}
+        closeLogout={closeLogoutConfirmation}
+        handleLogout={handleLogout}
+      />
       <div
         className={`popup-overlay ${isPopupVisible ? "show" : ""}`}
         onClick={handleClosePopup}
@@ -201,7 +227,11 @@ function Profile() {
               </a>
             </li>
             <li>
-              <a href="#" class="logout">
+              <a
+                href="#"
+                class="logout"
+                onClick={() => setShowLogoutConfirmation(true)}
+              >
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="nav-item">Logout</span>
               </a>
@@ -249,7 +279,7 @@ function Profile() {
           <div class="profile-bio">
             <p>
               It takes monumental improvement for us to change how we live our
-              lives. Design is the way we access that improvement.
+              lives. 
             </p>
           </div>
 

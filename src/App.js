@@ -6,6 +6,7 @@ import ManagerPage from "./component/managerpage/managerpage";
 import Treasurer from "./component/managerpage copy/managerpage";
 import Profile from './component/profilepage/profile'
 import ProfileAdmin from './component/profilepageAdmin/profile'
+import ProfileFD from './component/profilepageFD/profile'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/manager-page" element={<ManagerPage />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profileAdmin" element={<ProfileAdmin/>} />
+          <Route path="/profileFD" element={<ProfileFD/>} />
           <Route path="/Treasurer" element={<Treasurer/>} />
         </Routes>
       </div>

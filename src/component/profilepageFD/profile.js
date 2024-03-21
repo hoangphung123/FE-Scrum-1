@@ -7,17 +7,17 @@ import * as UserStore from "../../server/userStore";
 import LogoutComponent from "../logoutComponent/logoutComponent";
 
 function Profile() {
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const navigate = useNavigate();
   const [amountTotal, setAmountTotal] = useState(null);
 
   const handleProfile = () => {
-    navigate("/profile");
+    navigate("/profileFD");
   };
 
   const handleRequest = () => {
-    navigate("/home-page");
+    navigate("/Treasurer");
   };
 
   const handleClosePopup = () => {
@@ -214,15 +214,7 @@ function Profile() {
               <a href="#">
                 <i class="fas fa-user"></i>
                 <span class="nav-item" onClick={handleRequest}>
-                  REQUEST
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fas fa-chart-bar"></i>
-                <span class="nav-item" onClick={handleBackgroundClick}>
-                  BACKGROUND
+                  DASHBOARD
                 </span>
               </a>
             </li>
@@ -235,11 +227,7 @@ function Profile() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                class="logout"
-                onClick={() => setShowLogoutConfirmation(true)}
-              >
+              <a href="#" class="logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="nav-item">Logout</span>
               </a>

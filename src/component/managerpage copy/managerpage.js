@@ -321,9 +321,15 @@ function Treasurer() {
 
           <ul>
             <li>
-              <a href="/manager-page">
+              <a href="/Treasurer">
                 <i class="fas fa-user"></i>
                 <span class="nav-item">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="/profileFD">
+                <i class="fas fa-user"></i>
+                <span class="nav-item">Profile</span>
               </a>
             </li>
             <li>
