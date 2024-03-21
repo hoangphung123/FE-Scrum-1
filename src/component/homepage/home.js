@@ -14,6 +14,10 @@ function Homepage() {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [shouldHideOverlay, setShouldHideOverlay] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedCategorys, setSelectedCategorys] = useState(null);
+
+  const [keyword, setKeyword] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
   const defaultImageUrl =
     "https://i.pinimg.com/564x/12/35/3a/12353a68b508d9720526f65b192f71bf.jpg";
   const defaultImageUrlBackground =
@@ -27,6 +31,7 @@ function Homepage() {
     description: "",
     price: "",
   });
+  const categories = ["default", "study", "Medical", "Travel", "Food", "Event"];
   const [requestItem, setItems] = useState([
     {
       category: "medical",
@@ -97,6 +102,25 @@ function Homepage() {
   const closeLogoutConfirmation = () => {
     // Đóng cửa sổ xác nhận
     setShowLogoutConfirmation(false);
+  };
+
+  const handleSearch = async (e) => {
+    const { value } = e.target;
+    setKeyword(value);
+    try {
+      // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
+      const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+      const RequestItem = await ItemStore.getAllPostBykey(accessToken, value);
+
+      // Sắp xếp mảng RequestItem theo trường updatedAt
+      RequestItem.listData.sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+
+      setItems(RequestItem.listData);
+    } catch (error) {
+      console.error("Error fetching friends:", error.message);
+    }
   };
 
   const handleCategoryChange = (event) => {
@@ -233,6 +257,49 @@ function Homepage() {
     } catch (error) {
       console.error("Error while creating request:", error.message);
       // Xử lý lỗi nếu cần
+    }
+  };
+
+  const fetchItems = async () => {
+    try {
+      // Assuming you have an accessToken, you can get it from your authentication context or elsewhere
+      const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+      const RequestItem = await ItemStore.getAllPost(accessToken);
+
+      // Sắp xếp mảng RequestItem theo trường updatedAt
+      RequestItem.listData.sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+
+      setItems(RequestItem.listData);
+    } catch (error) {
+      console.error("Error fetching friends:", error.message);
+    }
+  };
+
+  const handleFilter = async (category) => {
+    try {
+      setSelectedCategorys(category);
+      // Lấy accessToken từ localStorage
+      const accessToken = JSON.parse(localStorage.getItem("tokenData"));
+
+      if (category === "all") {
+        fetchItems();
+        return;
+      }
+
+      // Lấy dữ liệu từ server dựa trên category đã chọn
+      const filteredItems = await ItemStore.getAllPost(accessToken, category);
+
+      // Sắp xếp mảng filteredItems theo trường updatedAt
+      filteredItems.listData.sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+
+      // Cập nhật state với dữ liệu đã lọc
+      setItems(filteredItems.listData);
+    } catch (error) {
+      console.error("Lỗi khi lọc dữ liệu:", error.message);
     }
   };
 
@@ -522,7 +589,7 @@ function Homepage() {
               <li>
                 <a href="/profile">
                   <i class="fas fa-cog"></i>
-                  <span class="nav-item">Profile</span>
+                  <span class="nav-item">PROFILE</span>
                 </a>
               </li>
               <li>
@@ -552,45 +619,41 @@ function Homepage() {
           <div class="main-body">
             <h1 className="title-main-body">Recent Request</h1>
 
-            <div class="search_bar">
-              <input type="search" placeholder="Search request here..."></input>
-              <select name="" id="">
-                <option>default</option>
-                <option>study</option>
-                <option>Medical</option>
-                <option>Travel</option>
-                <option>Food</option>
-                <option>Event</option>
+            <div className="search_bar">
+              <input
+                type="search"
+                placeholder="Search request here..."
+                onChange={handleSearch}
+              ></input>
+              <select
+                name=""
+                id=""
+                onChange={(e) => handleFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="default">default</option>
+                <option value="study">study</option>
+                <option value="Medical">Medical</option>
+                <option value="Travel">Travel</option>
+                <option value="Food">Food</option>
+                <option value="Event">Event</option>
               </select>
               <select class="filter">
                 <option>Filter</option>
               </select>
             </div>
-            <div class="tags_bar">
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Default</span>
-              </div>
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Medical</span>
-              </div>
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Study</span>
-              </div>
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Food</span>
-              </div>
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Travel</span>
-              </div>
-              <div class="tag">
-                <i class="fas fa-times"></i>
-                <span>Event</span>
-              </div>
+            <div className="tags_bar">
+              {categories.map((category, index) => (
+                <div
+                  key={index}
+                  className={`tag ${
+                    selectedCategorys === category ? "selected" : ""
+                  }`}
+                >
+                  <i className="fas fa-times"></i>
+                  <span>{category}</span>
+                </div>
+              ))}
             </div>
 
             <div class="row">
