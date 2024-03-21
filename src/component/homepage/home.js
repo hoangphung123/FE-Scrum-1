@@ -218,6 +218,23 @@ function Homepage() {
     }
   };
 
+  const handleSort = (event) => {
+    const option = event.target.value;
+    let sortedItems = [...requestItem];
+
+    if (option === "asc") {
+      sortedItems.sort((a, b) => a.amount - b.amount);
+    } else if (option === "desc") {
+      sortedItems.sort((a, b) => b.amount - a.amount);
+    } else if (option === "updatedAt_asc") {
+      sortedItems.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+    } else if (option === "updatedAt_desc") {
+      sortedItems.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    }
+
+    setItems(sortedItems);
+  };
+
   const handleCreateRequest = async () => {
     const categoryValue = selectedCategory || "default";
     const accessToken = JSON.parse(localStorage.getItem("tokenData"));
@@ -584,16 +601,19 @@ function Homepage() {
           <div class="navbar">
             <div class="logo">
               <img
-                src={amountTotal &&
+                src={
+                  amountTotal &&
                   amountTotal.data &&
                   amountTotal.data.avatar_url &&
-                  amountTotal.data.avatar_url}
+                  amountTotal.data.avatar_url
+                }
                 alt=""
               ></img>
-              <h1>{amountTotal &&
-                amountTotal.data &&
-                amountTotal.data.username &&
-                amountTotal.data.username}{" "}
+              <h1>
+                {amountTotal &&
+                  amountTotal.data &&
+                  amountTotal.data.username &&
+                  amountTotal.data.username}{" "}
               </h1>
             </div>
             <p className="amount-total">
@@ -670,8 +690,16 @@ function Homepage() {
                 <option value="Food">Food</option>
                 <option value="Event">Event</option>
               </select>
-              <select class="filter">
+              <select class="filter" onChange={handleSort}>
                 <option>Filter</option>
+                <option value="asc">Sort by ascending level</option>
+                <option value="desc">Sort by descending level</option>
+                <option value="updatedAt_asc">
+                  Sort by updatedAt ascending
+                </option>
+                <option value="updatedAt_desc">
+                  Sort by updatedAt descending
+                </option>
               </select>
             </div>
             <div className="tags_bar">
@@ -752,7 +780,20 @@ function Homepage() {
                                 JSON.parse(localStorage.getItem("userData"))
                                   .username}
                             </h5>
+                            <img
+                              className="img-user"
+                              src={
+                                amountTotal &&
+                                amountTotal.data &&
+                                amountTotal.data.avatar_url &&
+                                amountTotal.data.avatar_url
+                              }
+                              alt="user"
+                            />
                           </div>
+                        </div>
+                        <div className="update-AT">
+                          {new Date(item.updatedAt).toLocaleString()}
                         </div>
                       </div>
                     </div>

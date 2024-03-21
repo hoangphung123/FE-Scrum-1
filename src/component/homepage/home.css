@@ -1062,3 +1062,13 @@ a {
   --antd-arrow-background-color: rgb(138 226 225 / 85%) !important;
 }
 
+
+
+.update-AT {
+  margin-top: 25px;
+}
+
+img.img-user {
+  object-fit: cover;
+  margin-left: 15px;
+}
